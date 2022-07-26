@@ -1,0 +1,42 @@
+within Abusesystem;
+
+package Tuff
+  model Druckmodel
+  Modelica.SIunits.Temperature T;
+  parameter Modelica.SIunits.HeatCapacity cp= 14;
+  parameter Modelica.SIunits.Mass m=1.5;
+  Modelica.SIunits.Heat Q;
+  initial equation
+  T=300;
+  equation
+  der (Q)=m*cp*der(T);
+  der(T)=24;
+  end Druckmodel;
+
+  function Pmax
+  input Modelica.SIunits.Temperature T;
+  input Modelica.SIunits.Pressure P;
+  output Modelica.SIunits.Pressure PMAX;
+  parameter Modelica.SIunits.Temperature T1;
+  parameter Modelica.SIunits.Pressure P1;
+  algorithm
+PMAX:= P*(1-T1/T) + PMAX(T=T1,P=P1)*T1*P/T*P1;
+  end Pmax;
+
+  model r
+  // explosion pressure rate
+  parameter Modelica.SIunits.Pressure Pmax=800;
+  parameter Modelica.SIunits.Pressure Pint=150;
+  parameter Integer i(start=1,fixed=true),n= 500;
+  parameter Modelica.SIunits.Temperature Ti = 25;
+  parameter Real Ri = Pmax/Pint;
+  
+  Real R[n];
+  Real T[n];
+  equation
+  for i in 1:n loop
+  T[i] = i + Ti;
+  R[i] = 1 + (R-1)*T[i]/(i+Ti);
+  end for;
+  end r;
+end Tuff;

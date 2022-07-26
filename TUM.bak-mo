@@ -1,0 +1,13 @@
+within Abusesystem;
+
+package TUM
+  block Vgas
+  extends Parameters.Batteryparameters;
+  input Real C = Ccell;
+  output Modelica.SIunits.Volume Vg;
+  protected
+  parameter Real Kgas = 12; 
+  equation
+Vg = Kgas*C;
+  end Vgas;
+end TUM;
